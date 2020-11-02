@@ -36,12 +36,13 @@ class ExchangeFragment : Fragment() {
     var currentItem: Int = 0
     var totalItem: Int = 0
     var scrolloutItems: Int = 0
-     var count  : Int = 0
+     var counts  : Int = 0
      var visible: Boolean = true
+    var count : Int = 0
     lateinit var sharedpreferences: SharedPreferences
     private var mhandaler : Handler = Handler()
     lateinit var layoutManager: RecyclerView.LayoutManager
-     lateinit var currencydata: ArrayList<io.bechitra.currencyanalyzer.network.Currency>
+      var currencydata: ArrayList<io.bechitra.currencyanalyzer.network.Currency>? = null
     var preConfig : PreConfig = PreConfig()
     lateinit var currencytask : io.bechitra.currencyanalyzer.network.Currency
 
@@ -92,12 +93,13 @@ class ExchangeFragment : Fragment() {
        val rate = sharedpreferences.getString("rate",null)
         val source = sharedpreferences.getString("source",null)
         val destinations = sharedpreferences.getString("destination",null)
-        d("date",date)
-        d("rate",rate)
-        d("source",source.toString())
-        d("destination",destinations.toString())
+//        d("date",date)
+//        d("rate",rate)
+//        d("source",source.toString())
+//        d("destination",destinations.toString())
 
         d("currencydata", currencydata.toString())
+
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("shared preferences", MODE_PRIVATE)
         val gson = Gson()
         var json1 = sharedPreferences.getString("task list", null)
@@ -110,15 +112,38 @@ class ExchangeFragment : Fragment() {
 
 
         currencytask = Currency(date.toString(),source.toString(),rate!!.toDouble(),destinations.toString())
-        currencydata?.add(currencytask)
+//                currencytask = Currency("2020-1-20","dhaka",5.4,"faridpur")
+            var size = currencydata!!.size - 1
+        for (i in 0..size){
+            if(currencydata!![i]==currencytask){
+                d("dublicate","dublicated data")
+                counts = counts+1
+            }
+            else if(currencydata!![i]!= currencytask){
+                d("notdublicated","not dublicated")
 
-        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+            }
+        }
 
-        var json = gson.toJson(currencydata)
-        editor.putString("task list",json)
-        editor.commit()
+        if(counts<=1){
+            currencydata?.add(currencytask)
+            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+            var json = gson.toJson(currencydata)
+            editor.putString("task list",json)
+            editor.commit()
+        }
 
-        d("jsondata",json)
+
+
+
+        var json2 = sharedPreferences.getString("task list", null)
+        val type1: Type = object : TypeToken<ArrayList<Currency?>?>() {}.type
+        currencydata = gson.fromJson(json2,type1)
+        if(currencydata == null){
+            currencydata = ArrayList()
+        }
+
+//        d("jsondata",json)
 
 
 
