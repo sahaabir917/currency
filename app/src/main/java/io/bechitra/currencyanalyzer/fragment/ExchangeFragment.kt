@@ -67,7 +67,7 @@ class ExchangeFragment : Fragment() {
 
 
             override fun onClickItemClick(view: View, data: Currency) {
-
+                d("not","nothing to do")
             }
 
         })
@@ -98,29 +98,34 @@ class ExchangeFragment : Fragment() {
         d("destination",destinations.toString())
 
         d("currencydata", currencydata.toString())
-
-        currencytask = Currency(date.toString(),source.toString(),rate!!.toDouble(),destinations.toString())
-        currencydata?.add(currencytask)
-        adapter.notifyItemInserted(currencydata.size)
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("shared preferences", MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = sharedPreferences.edit()
         val gson = Gson()
-        val json = gson.toJson(currencydata)
-        editor.putString("task list",json)
-        editor.apply()
-
-        d("jsondata",json)
-
-        val json1 = sharedPreferences.getString("task list", null)
+        var json1 = sharedPreferences.getString("task list", null)
         val type: Type = object : TypeToken<ArrayList<Currency?>?>() {}.type
         currencydata = gson.fromJson(json1,type)
         if(currencydata == null){
-            currencydata = ArrayList()}
+            currencydata = ArrayList()
+        }
+
+
+
+        currencytask = Currency(date.toString(),source.toString(),rate!!.toDouble(),destinations.toString())
+        currencydata?.add(currencytask)
+
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+
+        var json = gson.toJson(currencydata)
+        editor.putString("task list",json)
+        editor.commit()
+
+        d("jsondata",json)
+
+
 
         d("retrivedata",currencydata.toString())
 
         d("currencydata", currencytask.toString())
-        adapter.setDatas(currencydata!! as MutableList<Currency>)
+        adapter.setData(currencydata!! as MutableList<Currency>)
         layoutManager = LinearLayoutManager(activity)
         binding.recyclerView1.layoutManager = layoutManager
 
