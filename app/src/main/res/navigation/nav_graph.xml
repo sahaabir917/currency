@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    app:startDestination="@id/exchangeFragment">
+
+    <fragment
+        android:id="@+id/exchangeFragment"
+        android:name="io.bechitra.currencyanalyzer.fragment.ExchangeFragment"
+        android:label="ExchangeFragment" >
+        <action
+            android:id="@+id/action_exchangeFragment_to_growthFragment"
+            app:destination="@id/growthFragment" />
+        <action
+            android:id="@+id/action_exchangeFragment_to_calenderFragment"
+            app:destination="@id/calenderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/calenderFragment"
+        android:name="io.bechitra.currencyanalyzer.fragment.CalenderFragment"
+        android:label="CalenderFragment" />
+    <fragment
+        android:id="@+id/growthFragment"
+        android:name="io.bechitra.currencyanalyzer.fragment.GrowthFragment"
+        android:label="GrowthFragment" />
+</navigation>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">CurrencyAnalyzer</string>
+    <string name="euro_short">EURO</string>
+    <string name="default_rate">$12.25</string>
+    <string name="euro_long">European Union</string>
+    <string name="default_window_string">Updated : May 31,2020 1.30 PM</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
