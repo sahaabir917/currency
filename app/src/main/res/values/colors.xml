@@ -7,4 +7,9 @@
     <color name="tabColor">#263238</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="colorblack">#24272E</color>
+    <color name="colorGray">#7C7C80</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorPurple">#738DEF</color>
+
 </resources>

@@ -46,7 +46,7 @@ class DataRepository(private val application: Application) {
         coroutineScope.launch {
 //            d("pages",pagenumber.toString())
 
-            var getPropertyDeffered = Api.retrofitService.getPropertyAsync(50,2)
+            var getPropertyDeffered = Api.retrofitService.getPropertyAsync(50,1)
 
             try {
                 var property = getPropertyDeffered.await()

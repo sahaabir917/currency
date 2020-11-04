@@ -15,7 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.bechitra.currencyanalyzer.adapter.CurrencyCardAdapter
+import io.bechitra.currencyanalyzer.adapter.HomePageAdapter
 import io.bechitra.currencyanalyzer.databinding.FragmentAllExchangeBinding
 import io.bechitra.currencyanalyzer.network.Currency
 import io.bechitra.currencyanalyzer.sharedpreference.PreConfig
@@ -26,7 +26,7 @@ class AllExchangeFragment : Fragment() {
 
 
     private lateinit var binding: FragmentAllExchangeBinding
-    private lateinit var adapter : CurrencyCardAdapter
+    private lateinit var adapter : HomePageAdapter
     private lateinit var viewModel: ExchangeFragmentViewModel
     var pagenumber : Int = 1
     var isScrolling = false
@@ -51,7 +51,7 @@ class AllExchangeFragment : Fragment() {
     ): View? {
         binding = FragmentAllExchangeBinding.inflate(inflater, container, false)
         binding.recyclerView.layoutManager = LinearLayoutManager(inflater.context)
-        adapter = CurrencyCardAdapter(inflater.context,object :CurrencyCardAdapter.Itemclicklistener{
+        adapter = HomePageAdapter(inflater.context,object :HomePageAdapter.Itemclicklistener{
             override fun onClickItemClick(view: View, data: Currency) {
 
 //                currencytask = Currency(data.date,data.source,data.rate,data.destination)
@@ -75,6 +75,10 @@ class AllExchangeFragment : Fragment() {
                 editor.commit()
 
 //                preConfig.writeListInPref(context!!.applicationContext,currencydata)
+            }
+
+            override fun onClickCalculatorClick(view: View, data: Currency) {
+
             }
 
         })

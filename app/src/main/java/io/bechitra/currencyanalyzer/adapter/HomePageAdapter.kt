@@ -14,7 +14,7 @@ import io.bechitra.currencyanalyzer.R
 import io.bechitra.currencyanalyzer.fragment.ExchangeFragment
 import io.bechitra.currencyanalyzer.network.Currency
 
-class CurrencyCardAdapter(private val context:Context,listener: Itemclicklistener ): RecyclerView.Adapter<HomePageAdapter.CurrencyCardViewHolder>() {
+class HomePageAdapter(private val context:Context, listener: Itemclicklistener ): RecyclerView.Adapter<HomePageAdapter.CurrencyCardViewHolder>() {
     private var dataSet :MutableList<io.bechitra.currencyanalyzer.network.Currency>?=null
     private var params : RelativeLayout.LayoutParams? = null
     lateinit var currencydata: MutableList<io.bechitra.currencyanalyzer.network.Currency>
@@ -25,11 +25,11 @@ class CurrencyCardAdapter(private val context:Context,listener: Itemclicklistene
         this.itemClickListerner = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomePageAdapter.CurrencyCardViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyCardViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.currency_card,  null)
         view.layoutParams = params
 
-        return HomePageAdapter.CurrencyCardViewHolder(view)
+        return CurrencyCardViewHolder(view)
     }
 
     override fun getItemCount(): Int {
@@ -47,7 +47,34 @@ class CurrencyCardAdapter(private val context:Context,listener: Itemclicklistene
         notifyDataSetChanged()
     }
 
+    override fun onBindViewHolder(holder: CurrencyCardViewHolder, position: Int) {
+        val currency = dataSet?.elementAt(position)
+        if( position == 0){
+            holder.calculatorImage.setImageResource(R.drawable.ic_baseline_calculate_24)
+            holder.calculatorImage.setOnClickListener {
+                d("calculator","calculator is clicked")
+                d("positon",position.toString())
+                currency?.let { it1 -> itemClickListerner!!.onClickCalculatorClick(it, it1) }
+            }
 
+        }
+
+
+
+//        holder.currencyRate.setText("$"+currency?.rate)
+        holder.currencyShort.setText("$"+currency?.source)
+        holder.currencyLong.setText("$"+currency?.destination)
+        holder.currencyRate.setText("$"+currency?.rate)
+
+        holder.itemView.setOnClickListener {
+            currency?.let { it1 -> itemClickListerner!!.onClickItemClick(it, it1) }
+
+            val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.mainFrameLayout, ExchangeFragment())
+            fragmentTransaction.commit()
+        }
+
+    }
 
     fun setDatas(mutableList: MutableList<Currency>) {
         dataSet!!.addAll(mutableList)
@@ -78,33 +105,6 @@ class CurrencyCardAdapter(private val context:Context,listener: Itemclicklistene
     interface Itemclicklistener{
         fun onClickItemClick(view:View, data: io.bechitra.currencyanalyzer.network.Currency)
         fun onClickCalculatorClick(view:View, data : io.bechitra.currencyanalyzer.network.Currency)
-    }
-
-    override fun onBindViewHolder(holder: HomePageAdapter.CurrencyCardViewHolder, position: Int) {
-        val currency = dataSet?.elementAt(position)
-        if( position == 0){
-            holder.calculatorImage.setImageResource(R.drawable.ic_baseline_calculate_24)
-            holder.calculatorImage.setOnClickListener {
-                d("calculator","calculator is clicked")
-                d("positon",position.toString())
-                currency?.let { it1 -> itemClickListerner!!.onClickCalculatorClick(it, it1) }
-            }
-        }
-
-
-
-//        holder.currencyRate.setText("$"+currency?.rate)
-        holder.currencyShort.setText("$"+currency?.source)
-        holder.currencyLong.setText("$"+currency?.destination)
-        holder.currencyRate.setText("$"+currency?.rate)
-
-        holder.itemView.setOnClickListener {
-            currency?.let { it1 -> itemClickListerner!!.onClickItemClick(it, it1) }
-
-            val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.mainFrameLayout, ExchangeFragment())
-            fragmentTransaction.commit()
-        }
     }
 }
 
