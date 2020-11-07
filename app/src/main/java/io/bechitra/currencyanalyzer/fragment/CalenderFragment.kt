@@ -34,6 +34,7 @@ class CalenderFragment : Fragment(){
         viewModel = ViewModelProvider(requireActivity()).get(CalenderFragmentViewModel::class.java)
 
         viewModel.getResponse.observe(viewLifecycleOwner, Observer {
+
             viewBind.calendarView.setDayFormatter(TextAdder(it))
         })
 

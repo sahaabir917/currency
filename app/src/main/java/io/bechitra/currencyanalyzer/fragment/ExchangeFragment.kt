@@ -26,6 +26,7 @@ import io.bechitra.currencyanalyzer.network.Currency
 import io.bechitra.currencyanalyzer.sharedpreference.PreConfig
 import io.bechitra.currencyanalyzer.viewmodel.ExchangeFragmentViewModel
 import kotlinx.android.synthetic.main.calculator.view.*
+import kotlinx.android.synthetic.main.currency_card.view.*
 import kotlinx.android.synthetic.main.fragment_exchange.*
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.lang.reflect.Type
@@ -94,6 +95,7 @@ class ExchangeFragment : Fragment() {
                     for(i in 0..size){
                         currencydata!![i].rate = currencydata!![i].rate / 1
                         d("aftermulti",currencydata.toString())
+//
                     }
 
                     adapter.setData(currencydata!! as MutableList<Currency>)
