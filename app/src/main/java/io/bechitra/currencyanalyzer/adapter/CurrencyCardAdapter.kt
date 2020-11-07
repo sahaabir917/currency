@@ -82,14 +82,7 @@ class CurrencyCardAdapter(private val context:Context,listener: Itemclicklistene
 
     override fun onBindViewHolder(holder: HomePageAdapter.CurrencyCardViewHolder, position: Int) {
         val currency = dataSet?.elementAt(position)
-        if( position == 0){
-            holder.calculatorImage.setImageResource(R.drawable.ic_baseline_calculate_24)
-            holder.calculatorImage.setOnClickListener {
-                d("calculator","calculator is clicked")
-                d("positon",position.toString())
-                currency?.let { it1 -> itemClickListerner!!.onClickCalculatorClick(it, it1) }
-            }
-        }
+
 
 
 

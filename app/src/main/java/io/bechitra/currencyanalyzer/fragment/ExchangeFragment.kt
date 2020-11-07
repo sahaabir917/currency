@@ -6,6 +6,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.text.method.TextKeyListener.clear
 import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
@@ -88,84 +89,74 @@ class ExchangeFragment : Fragment() {
 //
 
 
-                var size = currencydata!!.size - 1
-                sharedpreferences = context!!.getSharedPreferences("calculate", Context.MODE_PRIVATE)
-                val newrate = sharedpreferences.getString("result","null")
-                if(counting==1){
-                    for(i in 0..size){
-                        currencydata!![i].rate = currencydata!![i].rate / 1
-                        d("aftermulti",currencydata.toString())
-//
-                    }
-
-                    adapter.setData(currencydata!! as MutableList<Currency>)
-                }
-                else {
-
-                    for(i in 0..size){
-                        currencydata!![i].rate = currencydata!![i].rate / newrate!!.toDouble()
-                        d("aftermulti",currencydata.toString())
-                    }
-                    adapter.setData(currencydata!! as MutableList<Currency>)
-                }
-
-                counting++
-
-                alertDialog = AlertDialog.Builder(context)
-                var view1 = layoutInflater.inflate(R.layout.calculator,null)
-                view1.btn0.setOnClickListener { appendOnClick(true, "0",view1) }
-                view1.btn1.setOnClickListener { appendOnClick(true, "1",view1) }
-                view1.btn2.setOnClickListener { appendOnClick(true, "2",view1) }
-                view1.btn3.setOnClickListener { appendOnClick(true, "3",view1) }
-                view1.btn4.setOnClickListener { appendOnClick(true, "4",view1) }
-                view1.btn5.setOnClickListener { appendOnClick(true, "5",view1) }
-                view1.btn6.setOnClickListener { appendOnClick(true, "6",view1) }
-                view1.btn7.setOnClickListener { appendOnClick(true, "7",view1) }
-                view1.btn8.setOnClickListener { appendOnClick(true, "8",view1) }
-                view1.btn9.setOnClickListener { appendOnClick(true, "9",view1) }
-                view1.btnDot.setOnClickListener { appendOnClick(true, ".",view1) }
-
-                view1.btnPlus.setOnClickListener { appendOnClick(false, "+",view1) }
-                view1.btnMinus.setOnClickListener { appendOnClick(false, "-",view1) }
-                view1.btnMultiply.setOnClickListener { appendOnClick(false, "*",view1) }
-                view1.btnDivide.setOnClickListener { appendOnClick(false, "/",view1) }
-                view1.btnLeftB.setOnClickListener { appendOnClick(false, "(",view1) }
-                view1.btnRightB.setOnClickListener { appendOnClick(false, ")",view1) }
-
-                view1.btnClear.setOnClickListener {
-                    clearcalculator(view1)
-                }
-
-                view1.btnEqual.setOnClickListener {
-                    calculate(view1)
-                }
-
-                alertDialog.setView(view1)
-                dialog = alertDialog.create()
-                dialog.show()
-                view1.done.setOnClickListener {
-                    calculateComplete(view1,dialog)
-
-                }
-
-
             }
         })
 
 
         binding.recyclerView1.adapter = adapter
-//        currency data will come here from the
 
-//        currencydata = preConfig.readListFromPref(context!!)
+        binding.imageview2.setOnClickListener {
+            tvInput.text=""
+            linear1.visibility = View.VISIBLE
+            recyclerView1.visibility = View.GONE
 
-//        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("shared preferences", MODE_PRIVATE)
-//        val gson = Gson()
-//        val json = sharedPreferences.getString("tasklist", null)
-//        val type: Type = object : TypeToken<ArrayList<Currency>>() {}.type
-//        currencydata = gson.fromJson(json, type)
-//        if (currencydata == null) {
-//            currencydata = ArrayList<Currency>()
-//        }
+            var size = currencydata!!.size - 1
+            sharedpreferences = context!!.getSharedPreferences("calculate", Context.MODE_PRIVATE)
+            val newrate = sharedpreferences.getString("result","null")
+            if(counting==1){
+                for(i in 0..size){
+                    currencydata!![i].rate = currencydata!![i].rate / 1
+                    d("aftermulti",currencydata.toString())
+//
+                }
+
+                adapter.setData(currencydata!! as MutableList<Currency>)
+            }
+            else {
+
+                for(i in 0..size){
+                    currencydata!![i].rate = currencydata!![i].rate / newrate!!.toDouble()
+                    d("aftermulti",currencydata.toString())
+                }
+                adapter.setData(currencydata!! as MutableList<Currency>)
+            }
+
+            counting++
+
+            done.setOnClickListener {
+                calculateComplete()
+            }
+            btn0.setOnClickListener { appendOnClick(true, "0") }
+            btn1.setOnClickListener { appendOnClick(true, "1") }
+            btn2.setOnClickListener { appendOnClick(true, "2") }
+            btn3.setOnClickListener { appendOnClick(true, "3") }
+            btn4.setOnClickListener { appendOnClick(true, "4") }
+            btn5.setOnClickListener { appendOnClick(true, "5") }
+            btn6.setOnClickListener { appendOnClick(true, "6") }
+            btn7.setOnClickListener { appendOnClick(true, "7") }
+            btn8.setOnClickListener { appendOnClick(true, "8") }
+            btn9.setOnClickListener { appendOnClick(true, "9") }
+            btnDot.setOnClickListener { appendOnClick(true, ".") }
+
+
+            //Operator Listeners
+            btnPlus.setOnClickListener { appendOnClick(false, "+") }
+            btnMinus.setOnClickListener { appendOnClick(false, "-") }
+            btnMultiply.setOnClickListener { appendOnClick(false, "*") }
+            btnDivide.setOnClickListener { appendOnClick(false, "/") }
+            btnLeftB.setOnClickListener { appendOnClick(false, "(") }
+            btnRightB.setOnClickListener { appendOnClick(false, ")") }
+
+
+            btnClear.setOnClickListener {
+                clearcalculator()
+            }
+
+            btnEqual.setOnClickListener {
+                calculate()
+            }
+        }
+
 
          sharedpreferences = context!!.getSharedPreferences("MyPREFERENCES", Context.MODE_PRIVATE)
         val date = sharedpreferences.getString("date",null)
@@ -246,13 +237,13 @@ class ExchangeFragment : Fragment() {
         return binding.root
     }
 
-    private fun calculateComplete(view1: View, dialog: AlertDialog) {
+    private fun calculateComplete() {
 
         var sharedpreferences: SharedPreferences = context!!.getSharedPreferences("calculate", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedpreferences.edit()
-      if(view1.tvOutput.text.toString().toDouble()>0){
-          editor.putString("result",view1.tvOutput.text.toString())
-          d("results",view1.tvOutput.text.toString())
+      if(tvInput.text.toString().toDouble()>0){
+          editor.putString("result",tvInput.text.toString())
+          d("results",tvInput.text.toString())
           editor.commit()
       }
 //        else if(view!!.tvOutput.text.toString() == null){
@@ -265,11 +256,12 @@ class ExchangeFragment : Fragment() {
         else{
           Toast.makeText(context,"you cannot use 0",Toast.LENGTH_LONG).show()
           editor.putString("result","1")
-          d("results",view1.tvOutput.text.toString())
+          d("results",tvInput.text.toString())
           editor.commit()
       }
 
-        dialog.cancel()
+        recyclerView1.visibility = View.VISIBLE
+        linear1.visibility = View.GONE
 
         sharedpreferences = context!!.getSharedPreferences("calculate", Context.MODE_PRIVATE)
         val newrate = sharedpreferences.getString("result",null)
@@ -285,22 +277,22 @@ class ExchangeFragment : Fragment() {
 
     }
 
-    private fun clearcalculator(view1: View) {
-        view1.tvInput.text = ""
-        view1.tvOutput.text = ""
+    private fun clearcalculator() {
+        tvInput.text = ""
+        tvOutput.text = ""
     }
 
-    private fun calculate(view1: View) {
+    private fun calculate() {
 
         try {
 
-            val input = ExpressionBuilder(view1.tvInput.text.toString()).build()
+            val input = ExpressionBuilder(tvInput.text.toString()).build()
             val output = input.evaluate()
             val longOutput = output.toLong()
             if (output == longOutput.toDouble()){
-                view1.tvOutput.text = longOutput.toString()
+                tvInput.text = longOutput.toString()
             }else{
-                view1.tvOutput.text = output.toString()
+                tvInput.text = output.toString()
             }
 
         }catch (e:Exception){
@@ -308,14 +300,14 @@ class ExchangeFragment : Fragment() {
         }
     }
 
-    private fun appendOnClick(clear: Boolean, string: String, view1: View) {
+    private fun appendOnClick(clear: Boolean, string: String) {
         if (clear) {
-            view1.tvOutput.text = ""
-            view1.tvInput.append(string)
+            tvOutput.text = ""
+            tvInput.append(string)
         } else {
-            view1.tvInput.append(view1.tvOutput.text)
-            view1.tvInput.append(string)
-            view1.tvOutput.text = ""
+            tvInput.append(tvOutput.text)
+            tvInput.append(string)
+            tvOutput.text = ""
         }
     }
 

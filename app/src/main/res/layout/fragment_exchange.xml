@@ -46,20 +46,91 @@
             android:layout_gravity="center_horizontal"
            android:layout_marginTop="10dp"
             >
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Probable Next Best Window"
-                android:textSize="20sp"
-                android:padding="20dp"
-                android:textAlignment="center"
-                android:id="@+id/problable_next1"
-                android:gravity="center"
-                android:textColor="@color/white"/>
+                android:background="#3C2323"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_margin="8dp"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:background="#4C2A2A"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:id="@+id/flagImage"
+                            android:layout_height="56dp"
+                            android:src="@drawable/flag_japan" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:orientation="vertical"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/euro_short"
+                                android:textSize="20sp"
+                                android:textColor="@color/white"
+                                android:id="@+id/currencyShort" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:text="@string/euro_long"
+                                android:id="@+id/currencyLong" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvInput"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1"
+                            android:ellipsize="start"
+                            android:singleLine="true"
+                            android:paddingTop="10dp"
+                            android:gravity="center"
+                            android:textSize="25sp"
+                            android:textColor="@color/white"
+                            android:paddingLeft="10dp"/>
+                        <TextView
+                            android:id="@+id/tvOutput"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="60sp"
+                            android:ellipsize="start"
+                            android:gravity="end"
+                            android:textColor="@color/colorWhite"
+                            android:singleLine="true"
+                            android:paddingLeft="10dp"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/imageview2"
+                            android:src="@drawable/ic_baseline_calculate_24"
+                            />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
 
         </LinearLayout>
-
 
 
 
@@ -97,17 +168,18 @@
 <!--   calculator work start     -->
 
     <LinearLayout
+        android:paddingTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorblack"
+        android:background="@color/white"
         android:orientation="vertical"
+        android:id="@+id/linear1"
         android:visibility="gone"
         >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom"
             android:orientation="vertical">
 
             <LinearLayout
