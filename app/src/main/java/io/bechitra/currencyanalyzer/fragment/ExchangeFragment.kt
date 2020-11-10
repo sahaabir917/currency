@@ -6,7 +6,6 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import android.text.method.TextKeyListener.clear
 import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
@@ -26,8 +25,6 @@ import io.bechitra.currencyanalyzer.databinding.FragmentExchangeBinding
 import io.bechitra.currencyanalyzer.network.Currency
 import io.bechitra.currencyanalyzer.sharedpreference.PreConfig
 import io.bechitra.currencyanalyzer.viewmodel.ExchangeFragmentViewModel
-import kotlinx.android.synthetic.main.calculator.view.*
-import kotlinx.android.synthetic.main.currency_card.view.*
 import kotlinx.android.synthetic.main.fragment_exchange.*
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.lang.reflect.Type
@@ -51,14 +48,17 @@ class ExchangeFragment : Fragment() {
     private var mhandaler : Handler = Handler()
     lateinit var layoutManager: RecyclerView.LayoutManager
       var currencydata: ArrayList<io.bechitra.currencyanalyzer.network.Currency>? = null
+    var currencydatas: ArrayList<io.bechitra.currencyanalyzer.data.Currency>? = null
     var preConfig : PreConfig = PreConfig()
     lateinit var currencytask : io.bechitra.currencyanalyzer.network.Currency
+    lateinit var currencytasks : io.bechitra.currencyanalyzer.data.Currency
     lateinit var alertDialog: AlertDialog.Builder
     lateinit var dialog: AlertDialog
 
 
     init {
         this.currencydata = mutableListOf<Currency>() as ArrayList<Currency>
+        this.currencydatas = mutableListOf<io.bechitra.currencyanalyzer.data.Currency>() as ArrayList<io.bechitra.currencyanalyzer.data.Currency>
     }
 
     override fun onCreateView(
@@ -73,23 +73,16 @@ class ExchangeFragment : Fragment() {
         binding.recyclerView1.layoutManager = LinearLayoutManager(inflater.context)
         adapter = HomePageAdapter(inflater.context,object :HomePageAdapter.Itemclicklistener{
             override fun onClickItemClick(view: View, data: Currency) {
-//                var datasize = currencydata!!.size - 1
-//                for(i in 0..datasize){
-//                    if(currencydata!![i] == data){
-//                        currencydata?.removeAt(i)
-//                        adapter.setData(currencydata!! as MutableList<Currency>)
-//                    }
-//                }
-
-
-
+                TODO("Not yet implemented")
             }
+
 
             override fun onClickCalculatorClick(view: View, data: Currency) {
 //
-
-
+                TODO("Not yet implemented")
             }
+
+
         })
 
 
@@ -109,7 +102,6 @@ class ExchangeFragment : Fragment() {
                     d("aftermulti",currencydata.toString())
 //
                 }
-
                 adapter.setData(currencydata!! as MutableList<Currency>)
             }
             else {
@@ -173,13 +165,15 @@ class ExchangeFragment : Fragment() {
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("shared preferences", MODE_PRIVATE)
         val gson = Gson()
         var json1 = sharedPreferences.getString("task list", null)
-        val type: Type = object : TypeToken<ArrayList<Currency?>?>() {}.type
+        val type: Type = object : TypeToken<ArrayList<io.bechitra.currencyanalyzer.network.Currency?>?>() {}.type
         currencydata = gson.fromJson(json1,type)
         if(currencydata == null){
             currencydata = ArrayList()
         }
 
 
+
+//        currencytask = io.bechitra.currencyanalyzer.data.Currency(rate!!.to)
 
         currencytask = Currency(date.toString(),source.toString(),rate!!.toDouble(),destinations.toString())
 //                currencytask = Currency("2020-1-20","dhaka",5.4,"faridpur")
