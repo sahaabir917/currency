@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewBind.exchangeTab.setOnClickListener{
-            attachFragment(AllExchangeFragment())
+            attachFragment(ExchangeFragment())
         }
 
         viewBind.calenderTab.setOnClickListener{

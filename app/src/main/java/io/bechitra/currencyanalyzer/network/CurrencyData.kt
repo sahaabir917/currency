@@ -11,7 +11,9 @@ data class Currency(
         @SerializedName("date") var date : String,
         @SerializedName("source") var source:String,
         @SerializedName("rate") var rate: Double,
-        @SerializedName("destination") var destination:String
+        @SerializedName("destination") var destination:String,
+      
+
 //        val close:Double,
 //        val date:String,
 //        val from:String,

@@ -12,8 +12,7 @@
         <com.github.mikephil.charting.charts.LineChart
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#DC1E1E"
-            android:id="@+id/lineChart"/>
-
+            android:id="@+id/lineChart">
+        </com.github.mikephil.charting.charts.LineChart>
     </LinearLayout>
 </layout>

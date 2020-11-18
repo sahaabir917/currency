@@ -62,7 +62,7 @@ dependencies {
 // Material design
     implementation "com.google.android.material:material:$materialVersion"
 
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -82,5 +82,7 @@ dependencies {
     implementation "android.arch.navigation:navigation-ui-ktx:$version_navigation"
     implementation "com.google.code.gson:gson:2.8.6"
     implementation 'net.objecthunter:exp4j:0.4.8'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+//    implementation project(':MPChartLib')
 
 }

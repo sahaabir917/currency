@@ -1,2 +1,3 @@
+include ':MPChartLib'
 rootProject.name='CurrencyAnalyzer'
 include ':app'
