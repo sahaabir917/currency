@@ -12,7 +12,8 @@ data class Currency(
         @SerializedName("source") var source:String,
         @SerializedName("rate") var rate: Double,
         @SerializedName("destination") var destination:String,
-      
+        @SerializedName("high") var high:Double,
+        @SerializedName("low") var low:Double
 
 //        val close:Double,
 //        val date:String,

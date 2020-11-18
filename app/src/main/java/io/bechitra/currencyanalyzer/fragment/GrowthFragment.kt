@@ -166,9 +166,9 @@ class GrowthFragment : Fragment(){
     }
 
     private fun predictedData(): ArrayList<Currency> {
-        predicteddatas?.add(Currency("2020-01-28","USD",20.0,"afghani"))
-        predicteddatas?.add(Currency("2020-01-29","USD",16.8,"afghani"))
-        predicteddatas?.add(Currency("2020-01-30","USD",20.8,"afghani"))
+        predicteddatas?.add(Currency("2020-01-28","USD",20.0,"afghani",30.5,15.2))
+        predicteddatas?.add(Currency("2020-01-29","USD",16.8,"afghani",20.5,10.5))
+        predicteddatas?.add(Currency("2020-01-30","USD",20.8,"afghani",25.0,15.4))
 //        predicteddatas?.add(Currency("2020-01-31","USD",17.8,"afghani"))
 
 
@@ -179,14 +179,14 @@ class GrowthFragment : Fragment(){
     private fun historyData(): ArrayList<Currency> {
 
 
-        historyDatas?.add(Currency("2020-01-20","USD",10.0,"afghani"))
-        historyDatas?.add(Currency("2020-01-21","USD",14.1,"afghani"))
-        historyDatas?.add(Currency("2020-01-22","USD",13.02,"afghani"))
-        historyDatas?.add(Currency("2020-01-23","USD",13.98,"afghani"))
-        historyDatas?.add(Currency("2020-01-24","USD",12.1,"afghani"))
-        historyDatas?.add(Currency("2020-01-25","USD",14.6,"afghani"))
-        historyDatas?.add(Currency("2020-01-26","USD",21.4,"afghani"))
-        historyDatas?.add(Currency("2020-01-27","USD",10.5,"afghani"))
+        historyDatas?.add(Currency("2020-01-20","USD",10.0,"afghani",15.0,5.0))
+        historyDatas?.add(Currency("2020-01-21","USD",14.1,"afghani",19.8,10.8))
+        historyDatas?.add(Currency("2020-01-22","USD",13.02,"afghani",20.4,10.2))
+        historyDatas?.add(Currency("2020-01-23","USD",13.98,"afghani",16.8,10.8))
+        historyDatas?.add(Currency("2020-01-24","USD",12.1,"afghani",13.5,11.4))
+        historyDatas?.add(Currency("2020-01-25","USD",14.6,"afghani",19.6,12.5))
+        historyDatas?.add(Currency("2020-01-26","USD",21.4,"afghani",26.7,19.2))
+        historyDatas?.add(Currency("2020-01-27","USD",10.5,"afghani",15.5,4.5))
 
         return historyDatas
     }
