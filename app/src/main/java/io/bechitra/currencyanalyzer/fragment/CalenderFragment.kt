@@ -24,6 +24,12 @@ class CalenderFragment : Fragment(){
 
     private lateinit var viewBind:FragmentCalenderBinding
     private lateinit var viewModel:CalenderFragmentViewModel
+    var currencydata: ArrayList<io.bechitra.currencyanalyzer.network.Currency>? = null
+
+
+    init {
+        this.currencydata = mutableListOf<Currency>() as ArrayList<Currency>
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,10 +39,21 @@ class CalenderFragment : Fragment(){
         viewBind = FragmentCalenderBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(requireActivity()).get(CalenderFragmentViewModel::class.java)
 
-        viewModel.getResponse.observe(viewLifecycleOwner, Observer {
+//        viewModel.getResponse.observe(viewLifecycleOwner, Observer {
+//
+//            viewBind.calendarView.setDayFormatter(TextAdder(it))
+//        })
+//
+        currencydata?.add(Currency("2020-01-20","USD",10.0,"afghani",15.0,5.0))
+        currencydata?.add(Currency("2020-01-21","USD",14.1,"afghani",19.8,10.8))
+        currencydata?.add(Currency("2020-01-22","USD",13.02,"afghani",20.4,10.2))
+        currencydata?.add(Currency("2020-01-23","USD",13.98,"afghani",16.8,10.8))
+        currencydata?.add(Currency("2020-01-24","USD",12.1,"afghani",13.5,11.4))
+        currencydata?.add(Currency("2020-01-25","USD",14.6,"afghani",19.6,12.5))
+        currencydata?.add(Currency("2020-01-26","USD",21.4,"afghani",26.7,19.2))
+        currencydata?.add(Currency("2020-01-27","USD",10.5,"afghani",15.5,4.5))
 
-            viewBind.calendarView.setDayFormatter(TextAdder(it))
-        })
+        viewBind.calendarView.setDayFormatter(TextAdder(currencydata as List<Currency>))
 
         return viewBind.root
     }
@@ -54,7 +71,6 @@ class CalenderFragment : Fragment(){
                     return "      "+day.day.toString()+"\n$"+days.rate
                 }
             }
-
             return day.day.toString()
         }
 

@@ -91,6 +91,7 @@ class AllExchangeFragment : Fragment() {
         handler.postDelayed(object : Runnable {
             override fun run() {
                 Log.d("refreshed", "refreshed")
+//
 //                viewModel.requestNetwork()
 //                val v = viewModel.getDataSet()
 //                adapter.setDatas(v)

@@ -61,7 +61,9 @@ class MainActivity : AppCompatActivity() {
 
     fun attachFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.mainFrameLayout, fragment)
+        fragmentTransaction.replace(R.id.mainFrameLayout, fragment,null).addToBackStack(null)
         fragmentTransaction.commit()
     }
+
+
 }

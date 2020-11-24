@@ -20,4 +20,6 @@ interface CurrencyDao {
 
     @Query("delete from currency_data")
     suspend fun reset()
+
+
 }

@@ -6,8 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import io.bechitra.currencyanalyzer.room.dao.CurrencyDao
 import io.bechitra.currencyanalyzer.room.entity.Currency
+import io.bechitra.currencyanalyzer.room.entity.currencysettings
 
-@Database(entities = [Currency::class], version = 1, exportSchema = false)
+@Database(entities = [Currency::class,currencysettings::class], version = 2, exportSchema = false)
 public abstract class DatabaseRoom : RoomDatabase(){
     abstract fun currencyDao() : CurrencyDao
 
