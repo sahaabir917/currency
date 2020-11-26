@@ -4,34 +4,44 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import io.bechitra.currencyanalyzer.room.dao.CurrencyDao
 import io.bechitra.currencyanalyzer.room.entity.Currency
 import io.bechitra.currencyanalyzer.room.entity.currencysettings
 
-@Database(entities = [Currency::class,currencysettings::class], version = 2, exportSchema = false)
-public abstract class DatabaseRoom : RoomDatabase(){
-    abstract fun currencyDao() : CurrencyDao
+@Database(entities = [currencysettings::class], version = 2)
+abstract class RoomAppDb: RoomDatabase() {
+
+
+    abstract fun currencydao(): CurrencyDao ?
 
     companion object {
-        @Volatile
-        private var INSTANCE : DatabaseRoom? = null
+        private var INSTANCE: RoomAppDb?= null
+        val migration_1_2: Migration = object: Migration(1 , 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE currencysettings ADD COLUMN type TEXT DEFAULT ''")
+                database.execSQL("ALTER TABLE currencysettings ADD COLUMN destinationcountry TEXT DEFAULT ''")
 
-        fun getDatabase(context: Context) : DatabaseRoom {
-            val tempInstance = INSTANCE
-
-            if(tempInstance != null) {
-                return tempInstance
             }
+        }
 
-            synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    DatabaseRoom::class.java,
-                    "local_db"
-                ).build()
-                INSTANCE = instance
-                return instance
+        fun getAppDatabase(context: Context): RoomAppDb? {
+
+            if(INSTANCE == null ) {
+
+                INSTANCE = Room.databaseBuilder<RoomAppDb>(
+                    context.applicationContext, RoomAppDb::class.java, "AppDBB"
+                )
+
+                    .allowMainThreadQueries()
+                    .build()
+
             }
+            return INSTANCE
+        }
+        fun destroyInstance() {
+            INSTANCE = null
         }
     }
 }

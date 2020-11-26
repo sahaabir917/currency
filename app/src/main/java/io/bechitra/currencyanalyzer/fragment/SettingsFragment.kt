@@ -3,23 +3,37 @@ package io.bechitra.currencyanalyzer.fragment
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log.d
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.bechitra.currencyanalyzer.R
+import io.bechitra.currencyanalyzer.adapter.RecyclerViewAdapter
 import io.bechitra.currencyanalyzer.network.Currency
+import io.bechitra.currencyanalyzer.room.RoomAppDb
 import io.bechitra.currencyanalyzer.room.appDb
-import io.bechitra.currencyanalyzer.viewmodel.ExchangeFragmentViewModel
+import io.bechitra.currencyanalyzer.room.entity.currencysettings
+import io.bechitra.currencyanalyzer.viewmodel.SettingFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.android.synthetic.main.recyclerview_row.*
 
 
-class SettingsFragment : Fragment() {
+class SettingsFragment : Fragment(),RecyclerViewAdapter.RowClickListener {
+
+
+    private lateinit var currencysettingsvariable: currencysettings
+    private lateinit  var allsettings : List<currencysettings>
+   lateinit var recyclerViewAdapter : RecyclerViewAdapter
     private lateinit var db: appDb
+    private lateinit var adapter: RecyclerViewAdapter
     private var itemposition3: Int =0
+    lateinit var layoutManager: RecyclerView.LayoutManager
     var itemposition1 = 0
     var itemposition2 = 0
     private var startPoint1: Int = 0
@@ -27,12 +41,17 @@ class SettingsFragment : Fragment() {
     var currencydata: ArrayList<io.bechitra.currencyanalyzer.network.Currency>? = null
     lateinit var sharedpreferences: SharedPreferences
     private var options: MutableList<String>
+    private var option2 : MutableList<String>
     var startPoint = 0
+    lateinit var viewModel:SettingFragmentViewModel
     var endPoint = 0
     init {
         this.currencydata = mutableListOf<Currency>() as ArrayList<Currency>
         this.options = mutableListOf<String>()
+        this.currencysettingsvariable = currencysettings()
+        this.option2 = mutableListOf<String>()
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,12 +67,20 @@ class SettingsFragment : Fragment() {
 
 
         createdata()
-         db = Room.databaseBuilder(
-            activity!!,
-            appDb::class.java,
-            "currencysettings"
-        ).build()
+        showallsettingsdata.apply {
+            layoutManager = LinearLayoutManager(activity!!)
+            recyclerViewAdapter = RecyclerViewAdapter(this@SettingsFragment)
+            adapter = recyclerViewAdapter
+        }
+        viewModel= ViewModelProviders.of(this).get(SettingFragmentViewModel::class.java)
+        viewModel.getAllsettingsObserver().observe(this, Observer {
+             recyclerViewAdapter.setListData(ArrayList(it as ArrayList<currencysettings>))
+             recyclerViewAdapter.notifyDataSetChanged()
+        })
 
+
+
+        val currencyDao = RoomAppDb.getAppDatabase(activity!!)?.currencydao()
 
 
 
@@ -99,32 +126,21 @@ class SettingsFragment : Fragment() {
             options.add(i,currencydata!![i].destination)
         }
 
+        option2.add(0,"above")
+        option2.add(1,"below")
+
 //        sp_option3.adapter = ArrayAdapter<String>(activity!!,android.R.layout.simple_list_item_1,options)
         sp_option1.adapter = ArrayAdapter<String>(activity!!,android.R.layout.simple_list_item_1,options)
+        sp_option2.adapter = ArrayAdapter<String>(activity!!,android.R.layout.simple_list_item_1,options)
+        sp_option3.adapter = ArrayAdapter<String>(activity!!,android.R.layout.simple_list_item_1,option2)
         sharedpreferences = context!!.getSharedPreferences("1stcurrency",Context.MODE_PRIVATE)
         val positions1 = sharedpreferences.getString("destination1position","1")
         val position2 = sharedpreferences.getString("destination2position","1")
         val position3 = sharedpreferences.getString("homecurrencyposition","1")
         val range1 =  sharedpreferences.getString("destion1range","0")
         val range2 =  sharedpreferences.getString("destination2range","0")
-        seekbarresult1.text = range1
-        seekbarresult2.text = range2
+
         sp_option1.setSelection(positions1!!.toInt())
-//        sp_option3.setSelection(position3!!.toInt())
-//        sp_option3.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//            }
-//
-//            override fun onItemSelected(
-//                parent: AdapterView<*>?,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//                sp_result3!!.text  = options.get(position).toString()
-//                itemposition3 = position
-//            }
-//        }
 
 
         sp_option1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -142,8 +158,6 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        sp_option2.adapter = ArrayAdapter<String>(activity!!,android.R.layout.simple_list_item_1,options)
-        sp_option2.setSelection(position2!!.toInt())
         sp_option2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -159,43 +173,23 @@ class SettingsFragment : Fragment() {
             }
         }
 
-
-
-        seekbar1.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                seekbarresult1.text = progress.toString()
+        sp_option3.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-               if(seekBar!=null){
-                   startPoint = seekBar.progress
-               }
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                sp_result3!!.text  = option2.get(position).toString()
+                itemposition3 = position
             }
+        }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                if(seekBar != null){
-                    endPoint = seekBar.progress
-                }
-            }
-        })
 
-        seekbar2.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                seekbarresult2.text = progress.toString()
-            }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                if(seekBar!=null){
-                    startPoint1 = seekBar.progress
-                }
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                if(seekBar != null){
-                    endPoint1 = seekBar.progress
-                }
-            }
-        })
 
 
         saveButton.setOnClickListener {
@@ -211,7 +205,38 @@ class SettingsFragment : Fragment() {
 //            editor.putString("homecurrency",sp_result3.toString())
             editor.putString("homecurrencyposition",itemposition3.toString())
             editor.commit()
+
+            var country1 = sp_result1.text.toString()
+            var country2 = sp_result2.text.toString()
+            var avoberange = avoberange.text.toString()
+            var lowrange = belowrange.text.toString()
+
+            var currencysettingsdata = currencysettings()
+            currencysettingsdata.country = country1
+            currencysettingsdata.highrate = avoberange.toDouble()
+            currencysettingsdata.lowrate = null
+            currencysettingsdata.destinationcountry = country2
+            currencysettingsdata.type = sp_result3.text.toString()
+
+
+
+            if(saveButton.text.equals("Save")){
+            val settings= currencysettingsdata
+              viewModel.insertSettingsInfo(settings)
         }
+            else{
+            val settings= currencysettings(
+                countryname.getTag(countryname.id).toString().toInt(),
+                country1,
+                null,
+                avoberange.toDouble(),
+                lowrange.toDouble(),
+                null
+            )
+        }
+
+        }
+
 
 
 
@@ -276,5 +301,17 @@ class SettingsFragment : Fragment() {
         currencydata?.add(Currency("2020-01-20","USD",394.74,"HRK",400.8,324.1))
         currencydata?.add(Currency("2020-01-20","USD",439.74,"HTG",450.7,430.8))
         currencydata?.add(Currency("2020-01-20","USD",436.74,"HUF",456.2,416.3))
+    }
+
+    override fun onDelete(currencysettings: currencysettings) {
+        viewModel.DeleteSettingsInfo(currencysettings)
+    }
+
+    override fun onItemClick(currencysettings: currencysettings) {
+        countryname.text = currencysettings.country
+        countrycurrencyhigh.text = currencysettings.highrate.toString()
+        currencytype1.text = currencysettings.type.toString()
+        countryname.setTag(countryname.id,currencysettings.id)
+        saveButton.setText("Update")
     }
 }

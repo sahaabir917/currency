@@ -18,4 +18,7 @@ class ExchangeFragmentViewModel(application: Application) : AndroidViewModel(app
     fun requestNetwork(): MutableLiveData<List<io.bechitra.currencyanalyzer.network.Currency>> {
         return repository.getResponse
     }
+
+
+
 }

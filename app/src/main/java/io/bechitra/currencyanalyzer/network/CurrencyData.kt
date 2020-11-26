@@ -7,7 +7,8 @@ data class CurrencyData(
 
 )
 
-data class Currency(
+data class Currency
+        (
         @SerializedName("date") var date : String,
         @SerializedName("source") var source:String,
         @SerializedName("rate") var rate: Double,

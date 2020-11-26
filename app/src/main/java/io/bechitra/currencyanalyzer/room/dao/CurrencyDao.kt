@@ -3,23 +3,20 @@ package io.bechitra.currencyanalyzer.room.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import io.bechitra.currencyanalyzer.room.entity.Currency
+import io.bechitra.currencyanalyzer.room.entity.currencysettings
 
 @Dao
 interface CurrencyDao {
-    @Query("select * from currency_data")
-    fun getCurrencyData() : LiveData<List<Currency>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(currency: Currency)
+    @Insert
+    fun insertCurrencySettings(currencysettings: currencysettings?)
 
     @Update
-    suspend fun update(currency: Currency)
+    fun updatesettings(currencysettings: currencysettings?)
 
     @Delete
-    suspend fun delete(currency: Currency)
+    fun deletesettings(currencysettings: currencysettings?)
 
-    @Query("delete from currency_data")
-    suspend fun reset()
-
-
+    @Query("SELECT * FROM currencysettings")
+    fun getAllSettings() : List<currencysettings>
 }

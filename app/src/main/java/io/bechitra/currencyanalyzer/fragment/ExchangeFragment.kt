@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.media.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,8 +35,11 @@ import io.bechitra.currencyanalyzer.R
 import io.bechitra.currencyanalyzer.adapter.HomePageAdapter
 import io.bechitra.currencyanalyzer.databinding.FragmentExchangeBinding
 import io.bechitra.currencyanalyzer.network.Currency
+import io.bechitra.currencyanalyzer.room.RoomAppDb
+import io.bechitra.currencyanalyzer.room.entity.currencysettings
 import io.bechitra.currencyanalyzer.sharedpreference.PreConfig
 import io.bechitra.currencyanalyzer.viewmodel.ExchangeFragmentViewModel
+import io.bechitra.currencyanalyzer.viewmodel.SettingFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_exchange.*
 import kotlinx.android.synthetic.main.notifications.view.*
 import net.objecthunter.exp4j.ExpressionBuilder
@@ -45,10 +49,11 @@ import kotlin.random.Random
 
 
 class ExchangeFragment : Fragment() {
-
+    var sizeofdatabasesettings : Int = 0
+    private lateinit var databasesetting: List<currencysettings>
     private var range1: String? = null
     private var range2: String? = null
-
+    lateinit var viewModel1:SettingFragmentViewModel
     private var counting1: Int = 1
     private lateinit var binding: FragmentExchangeBinding
     private lateinit var adapter: HomePageAdapter
@@ -90,6 +95,7 @@ class ExchangeFragment : Fragment() {
         this.currencydata = mutableListOf<Currency>() as ArrayList<Currency>
         this.currencydatas =
             mutableListOf<io.bechitra.currencyanalyzer.data.Currency>() as ArrayList<io.bechitra.currencyanalyzer.data.Currency>
+        this.databasesetting = mutableListOf<currencysettings>() as List<currencysettings>
     }
 
     override fun onCreateView(
@@ -115,6 +121,11 @@ class ExchangeFragment : Fragment() {
 
 
         })
+
+        viewModel1= ViewModelProviders.of(this).get(SettingFragmentViewModel::class.java)
+
+        val currencyDao = RoomAppDb.getAppDatabase(activity!!)?.currencydao()
+
 
         setHasOptionsMenu(true)
         binding.recyclerView1.adapter = adapter
@@ -255,8 +266,53 @@ class ExchangeFragment : Fragment() {
         // making new currency data
 
         //get request from server
-        countrycurrency1 = Currency("2020-1-19","USD",83.3,mycurrency1source.toString(),21.9,19.9)
-        countrycurrency2 = Currency("2020-1-19","USD",20.9,mycurrency2source.toString(),21.9,19.9)
+
+
+        viewModel1.getAllsettingsObserver().observe(this, Observer {
+            databasesetting = it
+            d("size3",databasesetting.size.toString())
+            AddNewDataFromSettings(it)
+
+            var sizeofcurrency = currencydata!!.size - 1
+            sizeofdatabasesettings = it.size - 1
+            for(i in 0..sizeofdatabasesettings){
+            for(j in 0..sizeofcurrency){
+
+                if(databasesetting!![i].country == currencydata!![j].source && databasesetting!![i].destinationcountry == currencydata!![j].destination){
+                    if(databasesetting!![i].type == "above"){
+                        if(databasesetting!![i].highrate!! < currencydata!![j].rate ){
+                            d("expected","today " + databasesetting!![i].destinationcountry.toString() + " is High")
+                        }
+                    }
+
+                    else if(databasesetting!![i].type == "below"){
+                        if(databasesetting!![i].highrate!!  > currencydata!![j].rate){}
+                        d("expected","today " + databasesetting!![i].destinationcountry.toString() + " is low ")
+                    }
+                }
+
+
+//                if(databasesetting!![i].country == currencydata!![j].source && databasesetting!![i].destinationcountry == currencydata!![j].destination){
+//                    if(databasesetting!![i].type=="avobe"){
+//                        if(currencydata!![j].rate > databasesetting!![i].highrate!!.toDouble()){
+//                            d("expectedhighest","today "+ currencydata!![j].destination + " " + databasesetting!![i].destinationcountry + " is High")
+//                        }
+//                    }
+//                    else if(databasesetting!![i].type == "low"){
+//                        if(currencydata!![j].rate < databasesetting[i].highrate!!.toDouble()){
+//                            d("expectedhighest","today "+ currencydata!![j].destination + " " + databasesetting!![i].destinationcountry + " is low")
+//                        }
+//                    }
+//                }
+            }
+        }
+
+
+
+
+        })
+
+
 
 
         currencytask = Currency(
@@ -275,35 +331,39 @@ class ExchangeFragment : Fragment() {
         // check korci j ager dublicate data ache kina jdi pai thole r add korbo na
 
        CheckDataDublicateOrNot(currencytask)
-        CheckDataDublicateOrNot(countrycurrency1)
-        CheckDataDublicateOrNot(countrycurrency2)
-
-        var sizeofcurrency = currencydata!!.size - 1
-        for (i in 0..sizeofcurrency){
-            if(currencydata!![i].destination ==  countrycurrency1.destination){
-                d("countryfromlist",currencydata!![i].destination.toString())
-                d("countryfromsharedpref",countrycurrency2.destination)
-                d("compare",currencydata!![i].rate.toString())
-                d("rate",range1.toString())
-                if( range1!!.toDouble() <= currencydata!![i].rate){
-                    d("expected_highest",currencydata!![i].destination + " is high")
-                }
-            }
-        }
 
 
-        for(i in 0..sizeofcurrency){
-            if(currencydata!![i].destination == countrycurrency2.destination){
-                d("countryfromlist",currencydata!![i].destination.toString())
-                d("countryfromsharedpref",countrycurrency2.destination)
-                d("compare",currencydata!![i].rate.toString())
-                d("rate",range1.toString())
+//        var sizeofcurrency = currencydata!!.size - 1
+//        for (i in 0..sizeofcurrency){
+//            if(currencydata!![i].destination ==  countrycurrency1.destination){
+//                d("countryfromlist",currencydata!![i].destination.toString())
+//                d("countryfromsharedpref",countrycurrency2.destination)
+//                d("compare",currencydata!![i].rate.toString())
+//                d("rate",range1.toString())
+//                if( range1!!.toDouble() <= currencydata!![i].rate){
+//                    d("expected_highest",currencydata!![i].destination + " is high")
+//                }
+//            }
+//        }
 
-                if(range2!!.toDouble() <= currencydata!![i].rate ){
-                    d("expected_highest",currencydata!![i].destination + " is high")
-                }
-            }
-        }
+
+//        for(i in 0..sizeofcurrency){
+//            if(currencydata!![i].destination == countrycurrency2.destination){
+//                d("countryfromlist",currencydata!![i].destination.toString())
+//                d("countryfromsharedpref",countrycurrency2.destination)
+//                d("compare",currencydata!![i].rate.toString())
+//                d("rate",range1.toString())
+//
+//                if(range2!!.toDouble() <= currencydata!![i].rate ){
+//                    d("expected_highest",currencydata!![i].destination + " is high")
+//                }
+//            }
+//        }
+
+
+
+
+
 
 
         //get request call by using the parameter source and destination and call it continously after 1 mint. Not completed
@@ -407,7 +467,7 @@ class ExchangeFragment : Fragment() {
         }
 
 
-        //End of check here is the notification is on or not if on then take the required action
+        //End of check here is the notification is on or not. if on then take the required action
 
 
         d("retrivedata", currencydata.toString())
@@ -418,6 +478,16 @@ class ExchangeFragment : Fragment() {
         binding.recyclerView1.setHasFixedSize(true)
 
         return binding.root
+    }
+
+    private fun AddNewDataFromSettings(it: List<currencysettings>?) {
+          var size = it?.size!! - 1
+        for(i in 0..size){
+            //take a request call here
+            countrycurrency1 = Currency("2020-1-19",it[i].country.toString(),83.3,it[i].destinationcountry.toString(),21.9,19.9)
+            CheckDataDublicateOrNot(countrycurrency1)
+        }
+        d("size",size.toString())
     }
 
     private fun CheckDataDublicateOrNot(currencytask: Currency) {

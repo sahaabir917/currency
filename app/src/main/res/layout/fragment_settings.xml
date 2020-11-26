@@ -34,7 +34,9 @@
 
 
 
-
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -44,36 +46,112 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="Select first currency notification"/>
+        android:id="@+id/homerate"
+        android:text="home currency"/>
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/destinationrate"
+            android:text="destination currency"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/typerate"
+            android:text="Enter type"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:text="Enter range"
+            android:id="@+id/raterate"/>
 
 
     </LinearLayout>
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sp_option1"
-        android:layout_marginLeft="50dp"
-        />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sp_result1"/>
+
+</RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sp_option1"
+                android:layout_below="@id/homerate"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/sp_result1"
+                android:visibility="gone"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sp_option2"
+                android:layout_below = "@id/destinationrate"
+
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/sp_result2"/>
+
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sp_option3"
+                android:layout_below = "@id/typerate"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/sp_result3"
+                android:visibility="gone"/>
+
+            <EditText
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/avoberange"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+<!--  unnecessary -->
 
     <LinearLayout
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:visibility="gone"
         >
 
     <SeekBar
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:max="1000"
+        android:visibility="gone"
         android:id="@+id/seekbar1"/>
 
 
@@ -82,11 +160,12 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/seekbarresult1"
+            android:visibility="gone"
             android:layout_marginLeft="60dp"/>
 
     </LinearLayout>
 
-
+<!-- unnessecary-->
 
 
 <!--    2nd currency-->
@@ -94,6 +173,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView
@@ -106,23 +186,14 @@
 
     </LinearLayout>
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sp_option2"
-        android:layout_marginLeft="200dp"
-        />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sp_result2"/>
 
     <LinearLayout
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:visibility="gone"
         >
 
         <SeekBar
@@ -141,15 +212,33 @@
 
     </LinearLayout>
 
+
+
+<!--unnecessary-->
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/belowrange"
+        android:visibility="gone"/>
+<!--unnecessary-->
+
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/saveButton"
-        android:text="Save All settings"
+        android:text="Save"
         />
 
 
 <!--    end of 2nd currency-->
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/showallsettingsdata"/>
 
 
 
